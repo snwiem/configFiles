@@ -97,7 +97,7 @@ alias 'mv=mv -i'
 alias 'cp=cp -i'
 
 # For Git
-alias 'gk=z gitk --all'
+alias 'gk=gitk --all'
 alias 'gs=git status' # (NB overriding GhostScript)
 alias 'gd=git diff'
 alias 'gg=git gui'
@@ -117,6 +117,11 @@ alias 'last=last -a'
 alias 'zap=clear; echo -en "\e[3J"'
 alias 'rmedir=rmdir -v **/*(/^F)'
 alias 'xmlindent=xmlindent -t -f -nbe'
+
+# apt stuff
+alias 'as=apt-cache search'
+alias 'ai=sudo apt-get install'
+alias 'at=sudo apt-get remove --purge'
 
 # Typing errors...
 alias 'cd..=cd ..'
@@ -276,7 +281,7 @@ autoload zed
 #setopt promptsubst
 autoload -Uz promptinit
 promptinit
-prompt adam1
+prompt fade blue
 
 setopt histignorealldups sharehistory
 
