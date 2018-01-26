@@ -281,6 +281,30 @@ prompt adam1
 setopt histignorealldups sharehistory
 
 
+# Load SSH agent to prevent password queries
+SSH_ENV="$HOME/.ssh/environment"
+start_ssh_agent() {
+	/usr/bin/ssh-agent | sed 's/^echo/#echo/' > $SSH_ENV
+	chmod 600 $SSH_ENV
+	source $SSH_ENV > /dev/null
+	/usr/bin/ssh-add -t 43200 ;
+}
+if [ -f "$SSH_ENV" ]
+then
+	source "$SSH_ENV" > /dev/null
+	ps -ef | grep $SSH_AGENT_PID | grep ssh-agent$ > /dev/null || {
+		start_agent
+	}
+else
+	start_agent
+fi
+
+# set proxy environment
+if [ -f "$HOME/.proxy" ]; then
+	source "$HOME/.proxy"
+	proxy_cntlm
+fi
+
 # Load environment specific settings if available
 if [ -f $HOME/.zshrc-$(domainname) ]
 then
