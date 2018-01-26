@@ -1,0 +1,297 @@
+# My .zshrc file
+
+# Skip all if this is called from non-interactive shells
+[[ -z "$PS1" ]] && return
+
+# Make prompt a little bit more fancy
+PS1=$'%F{def}%(?..%B%K{red}[%?]%K{def}%b )%(1j.%b%K{yel}%F{bla}%jJ%F{def}%K{def} .)%F{white}%B%*%b %F{m}%m:%F{white}%~ %(!.#.>) %F{def}'
+
+# Set less options
+if [[ -x $(which less 2> /dev/null) ]]
+then
+    export PAGER="less"
+    export LESS="--ignore-case --LONG-PROMPT --QUIET --chop-long-lines -Sm --RAW-CONTROL-CHARS --quit-if-one-screen --no-init"
+    export LESSHISTFILE='-'
+    if [[ -x $(which lesspipe 2> /dev/null) ]]
+    then
+	LESSOPEN="| lesspipe %s"
+	export LESSOPEN
+    fi
+fi
+
+# Set default editor
+if [[ -x $(which vim 2> /dev/null) ]]
+then
+    export EDITOR="vim"
+    export USE_EDITOR=$EDITOR
+    export VISUAL=$EDITOR
+fi
+
+# Zsh settings for history
+export HISTIGNORE="&:ls:[bf]g:exit:reset:clear:cd:cd ..:cd..:zh"
+export HISTSIZE=25000
+export HISTFILE=~/.zsh_history
+export SAVEHIST=10000
+setopt INC_APPEND_HISTORY
+setopt HIST_IGNORE_ALL_DUPS
+setopt HIST_IGNORE_SPACE
+setopt HIST_REDUCE_BLANKS
+setopt HIST_VERIFY
+
+# Say how long a command took, if it took more than 10 seconds
+export REPORTTIME=10
+
+
+# Zsh spelling correction options
+#setopt CORRECT
+#setopt DVORAK
+
+# Prompts for confirmation after 'rm *' etc
+# Helps avoid mistakes like 'rm * o' when 'rm *.o' was intended
+setopt RM_STAR_WAIT
+
+# Background processes aren't killed on exit of shell
+setopt AUTO_CONTINUE
+
+# Don’t write over existing files with >, use >! instead
+setopt NOCLOBBER
+
+# Don’t nice background processes
+#setopt NO_BG_NICE
+
+# Enable color support of ls
+if [[ "$TERM" != "dumb" ]]; then
+    if [[ -x `which dircolors 2> /dev/null` ]]; then
+	eval `dircolors -b`
+	alias 'ls=ls --color=auto'
+    fi
+fi
+
+# Short command aliases
+alias 'l=ls'
+alias 'la=ls -A'
+alias 'll=ls -l'
+alias 'llh=ls -l --si'
+alias 'lq=ls -Q'
+alias 'lr=ls -R'
+alias 'lrs=ls -lrS'
+alias 'lrt=ls -lrt'
+alias 'lrta=ls -lrtA'
+alias 'lrth=ls -lrth --si'
+alias 'lrtha=ls -lrthA --si'
+alias 'j=jobs -l'
+alias 'kw=kwrite'
+alias 'tf=tail -F'
+alias 'grep=grep --colour --devices=skip'
+alias 'vnice=nice -n 20 ionice -c 3'
+alias 'get_iplayer=get_iplayer --nopurge'
+alias 'get-iplayer=get-iplayer --nopurge'
+alias "tree=tree -I 'CVS|*~'"
+alias 'lo=libreoffice'
+alias 'synchist=fc -RI'
+alias 'zh=grep --text ~/.zsh_history -e'
+
+# Play safe!
+alias 'rm=rm -i'
+alias 'mv=mv -i'
+alias 'cp=cp -i'
+
+# For Git
+alias 'gk=z gitk --all'
+alias 'gs=git status' # (NB overriding GhostScript)
+alias 'gd=git diff'
+alias 'gg=z git gui'
+alias 'git-stashpullpop=git stash && git pull --rebase && git stash pop'
+alias 'gl=git log --graph --abbrev-commit --pretty=oneline --decorate'
+
+# For convenience
+alias 'mkdir=mkdir -p'
+alias 'dmesg=dmesg --ctime'
+alias 'df=df --exclude-type=tmpfs'
+alias 'd.=df -h . |sed 1d'
+alias 'dus=du -msc * .*(N) | sort -n'
+alias 'dus.=du -msc .* | sort -n'
+alias 'fcs=(for i in * .*(N); do echo $(find $i -type f | wc -l) "\t$i"; done) | sort -n'
+alias 'fcs.=(for i in .*; do echo $(find $i -type f | wc -l) "\t$i"; done) | sort -n'
+alias 'last=last -a'
+alias 'zap=clear; echo -en "\e[3J"'
+alias 'rmedir=rmdir -v **/*(/^F)'
+alias 'xmlindent=xmlindent -t -f -nbe'
+
+# Typing errors...
+alias 'cd..=cd ..'
+
+# Quick TSV/CSV file formatting
+alias tsv='column -n -s "	" -t'
+alias csv='column -n -s , -t'
+
+# Use vi style
+bindkey -v
+
+# Use modern completion system
+autoload -Uz compinit
+compinit
+
+zstyle ':completion:*' auto-description 'specify: %d'
+zstyle ':completion:*' completer _expand _complete _correct _approximate
+zstyle ':completion:*' format 'Completing %d'
+zstyle ':completion:*' group-name ''
+zstyle ':completion:*' menu select=2
+zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
+zstyle ':completion:*' list-colors ''
+zstyle ':completion:*' list-prompt %SAt %p: Hit TAB for more, or the character to insert%s
+zstyle ':completion:*' matcher-list '' 'm:{a-z}={A-Z}' 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=* l:|=*'
+zstyle ':completion:*' menu select=long
+zstyle ':completion:*' select-prompt %SScrolling active: current selection at %p%s
+zstyle ':completion:*' use-compctl false
+zstyle ':completion:*' verbose true
+
+zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;31'
+zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
+# Don't complete backup files as commands.
+zstyle ':completion:*:complete:-command-::*' ignored-patterns '*\~'
+
+# Username completion.
+# Delete old definitions
+zstyle -d users
+# For SSH and Rsync, use remote users set in SSH configuration, plus root
+zstyle ':completion:*:*:(ssh|rsync):*' users root $(awk '$1 == "User" { print $2 }' ~/.ssh/config | sort -u)
+# For everything else, use non-system users from /etc/passwd, plus root
+zstyle ':completion:*:*:*:*' users root $(awk -F: '$3 > 1000 && $3 < 65000 { print $1 }' /etc/passwd)
+
+# Hostname completion
+# zstyle ':completion:*' hosts $( grep -h '\.' $HOME/.hosts* )
+
+# URL completion. Use URLs from history.
+zstyle -e ':completion:*:*:urls' urls 'reply=( ${${(f)"$(egrep --only-matching \(ftp\|https\?\)://\[A-Za-z0-9\].\* $HISTFILE)"}%%[# ]*} )'
+
+# Quote stuff that looks like URLs automatically.
+autoload -U url-quote-magic
+zstyle ':urlglobber' url-other-schema ftp git gopher http https magnet
+zstyle ':url-quote-magic:*' url-metas '*?[]^(|)~#='
+zle -N self-insert url-quote-magic
+
+# File/directory completion, for cd command
+zstyle ':completion:*:cd:*' ignored-patterns '(*/)#lost+found' '(*/)#CVS'
+#  and for all commands taking file arguments
+zstyle ':completion:*:(all-|)files' ignored-patterns '(|*/)CVS'
+
+# Prevent offering a file (process, etc) that's already in the command line.
+zstyle ':completion:*:(rm|cp|kill|diff|scp):*' ignore-line yes
+# (Use Alt-Comma to do something like "mv abcd.efg abcd.efg.old")
+
+# Completion selection by menu for kill
+zstyle ':completion:*:*:kill:*' menu yes select
+zstyle ':completion:*:kill:*' force-list always
+zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
+zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;31'
+
+# Filename suffixes to ignore during completion (except after rm command)
+# This doesn't seem to work
+zstyle ':completion:*:*:(^rm):*:*files' ignored-patterns '*?.o' '*?.c~' '*?.old' '*?.pro' '*~'
+zstyle ':completion:*:(^rm):*' ignored-patterns '*?.o' '*?.c~' '*?.old' '*?.pro' '*~'
+zstyle ':completion:*:(all-|)files' ignored-patterns '(|*/)CVS'
+#zstyle ':completion:*:(all-|)files' file-patterns '(*~|\\#*\\#):backup-files' 'core(|.*):core\ files' '*:all-files'
+
+zstyle ':completion:*:*:rmdir:*' file-sort time
+
+## Use cache
+# Some functions, like _apt and _dpkg, are very slow. You can use a cache in
+# order to proxy the list of results (like the list of available debian
+# packages)
+zstyle ':completion:*' use-cache on
+zstyle ':completion:*' cache-path ~/.zsh/cache
+
+# Quick ../../.. from https://github.com/blueyed/oh-my-zsh
+resolve-alias() {
+    # Recursively resolve aliases and echo the command.
+    typeset -a cmd
+    cmd=(${(z)1})
+    while (( ${+aliases[$cmd[1]]} )) \
+	      && [[ ${aliases[$cmd[1]]} != $cmd ]]; do
+	cmd=(${(z)aliases[${cmd[1]}]})
+    done
+    echo $cmd
+}
+rationalise-dot() {
+    # Auto-expand "..." to "../..", "...." to "../../.." etc.
+    # It skips certain commands (git, tig, p4).
+    #
+    # resolve-alias is defined in a separate function.
+
+    local MATCH # keep the regex match from leaking to the environment.
+
+    # Skip pasted text.
+    if (( PENDING > 0 )); then
+	zle self-insert
+	return
+    fi
+
+    if [[ $LBUFFER =~ '(^|/| ||'$'\n''|\||;|&)\.\.$' ]] \
+	   && ! [[ $(resolve-alias $LBUFFER) =~ '(git|tig|p4)' ]]; then
+	LBUFFER+=/
+	zle self-insert
+	zle self-insert
+    else
+	zle self-insert
+    fi
+}
+zle -N rationalise-dot
+bindkey . rationalise-dot
+bindkey -M isearch . self-insert 2>/dev/null
+
+autoload zsh/sched
+
+# Copys word from earlier in the current command line
+# or previous line if it was chosen with ^[. etc
+autoload copy-earlier-word
+zle -N copy-earlier-word
+bindkey '^[,' copy-earlier-word
+
+# Cycle between positions for ambigous completions
+autoload cycle-completion-positions
+zle -N cycle-completion-positions
+bindkey '^[z' cycle-completion-positions
+
+# Increment integer argument
+autoload incarg
+zle -N incarg
+bindkey '^X+' incarg
+
+# Write globbed files into command line
+autoload insert-files
+zle -N insert-files
+bindkey '^Xf' insert-files
+
+# xargs but zargs
+autoload -U zargs
+
+# Calculator
+autoload zcalc
+
+# Line editor
+autoload zed
+
+# Set up the prompt
+setopt promptsubst
+autoload -Uz promptinit
+promptinit
+prompt adam1
+
+setopt histignorealldups sharehistory
+
+
+# Load environment specific settings if available
+if [ -f $HOME/.zshrc-$(domainname) ]
+then
+	. $HOME/.zshrc-$(domainname)
+fi
+if [ -f $HOME/.zshrc-$(hostname -f) ]
+then
+	. $HOME/.zshrc-$(hostname -f)
+fi
+if [ -f $HOME/.zshrc-$HOST ]
+then
+	. $HOME/.zshrc-$HOST
+fi
+
