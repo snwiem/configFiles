@@ -4,7 +4,7 @@
 [[ -z "$PS1" ]] && return
 
 # Make prompt a little bit more fancy
-PS1=$'%F{def}%(?..%B%K{red}[%?]%K{def}%b )%(1j.%b%K{yel}%F{bla}%jJ%F{def}%K{def} .)%F{white}%B%*%b %F{m}%m:%F{white}%~ %(!.#.>) %F{def}'
+#PS1=$'%F{def}%(?..%B%K{red}[%?]%K{def}%b )%(1j.%b%K{yel}%F{bla}%jJ%F{def}%K{def} .)%F{white}%B%*%b %F{m}%m:%F{white}%~ %(!.#.>) %F{def}'
 
 # Set less options
 if [[ -x $(which less 2> /dev/null) ]]
@@ -273,7 +273,7 @@ autoload zcalc
 autoload zed
 
 # Set up the prompt
-setopt promptsubst
+#setopt promptsubst
 autoload -Uz promptinit
 promptinit
 prompt adam1
