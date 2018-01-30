@@ -29,14 +29,17 @@ fi
 
 # Zsh settings for history
 export HISTIGNORE="&:ls:[bf]g:exit:reset:clear:cd:cd ..:cd..:zh"
-export HISTSIZE=25000
+export HISTSIZE=5000
 export HISTFILE=~/.zsh_history
-export SAVEHIST=10000
+export SAVEHIST=5000
 setopt INC_APPEND_HISTORY
 setopt HIST_IGNORE_ALL_DUPS
 setopt HIST_IGNORE_SPACE
 setopt HIST_REDUCE_BLANKS
-setopt HIST_VERIFY
+#setopt HIST_VERIFY
+setopt APPEND_HISTORY
+setopt SHARE_HISTORY
+
 
 # Say how long a command took, if it took more than 10 seconds
 export REPORTTIME=10
@@ -122,6 +125,9 @@ alias 'xmlindent=xmlindent -t -f -nbe'
 alias 'as=apt-cache search'
 alias 'ai=sudo apt-get install'
 alias 'at=sudo apt-get remove --purge'
+
+# additional tools
+alias 'go=links -http-proxy "$(echo $http_proxy | sed -e "s/http:\/\///" -e "s/\/$//")" -https-proxy "$(echo $https_proxy | sed -e "s/http:\/\///" -e "s/\/$//")"'
 
 # Typing errors...
 alias 'cd..=cd ..'
@@ -241,47 +247,47 @@ rationalise-dot() {
 	zle self-insert
     fi
 }
-zle -N rationalise-dot
-bindkey . rationalise-dot
-bindkey -M isearch . self-insert 2>/dev/null
+#zle -N rationalise-dot
+#bindkey . rationalise-dot
+#bindkey -M isearch . self-insert 2>/dev/null
 
-autoload zsh/sched
+#autoload zsh/sched
 
 # Copys word from earlier in the current command line
 # or previous line if it was chosen with ^[. etc
-autoload copy-earlier-word
-zle -N copy-earlier-word
-bindkey '^[,' copy-earlier-word
+#autoload copy-earlier-word
+#zle -N copy-earlier-word
+#bindkey '^[,' copy-earlier-word
 
 # Cycle between positions for ambigous completions
-autoload cycle-completion-positions
-zle -N cycle-completion-positions
-bindkey '^[z' cycle-completion-positions
+#autoload cycle-completion-positions
+#zle -N cycle-completion-positions
+#bindkey '^[z' cycle-completion-positions
 
 # Increment integer argument
-autoload incarg
-zle -N incarg
-bindkey '^X+' incarg
+#autoload incarg
+#zle -N incarg
+#bindkey '^X+' incarg
 
 # Write globbed files into command line
-autoload insert-files
-zle -N insert-files
-bindkey '^Xf' insert-files
+#autoload insert-files
+#zle -N insert-files
+#bindkey '^Xf' insert-files
 
 # xargs but zargs
-autoload -U zargs
+#autoload -U zargs
 
 # Calculator
-autoload zcalc
+#autoload zcalc
 
 # Line editor
-autoload zed
+#autoload zed
 
 # Set up the prompt
 #setopt promptsubst
-autoload -Uz promptinit
-promptinit
-prompt fade blue
+#autoload -Uz promptinit
+#promptinit
+#prompt fade blue
 
 setopt histignorealldups sharehistory
 
@@ -298,10 +304,10 @@ if [ -f "$SSH_ENV" ]
 then
 	source "$SSH_ENV" > /dev/null
 	ps -ef | grep $SSH_AGENT_PID | grep ssh-agent$ > /dev/null || {
-		start_agent
+		start_ssh_agent
 	}
 else
-	start_agent
+	start_ssh_agent
 fi
 
 # set proxy environment
@@ -324,3 +330,4 @@ then
 	. $HOME/.zshrc-$HOST
 fi
 
+source  /usr/local/lib/python3.5/dist-packages/powerline/bindings/zsh/powerline.zsh
