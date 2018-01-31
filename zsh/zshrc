@@ -330,4 +330,6 @@ then
 	. $HOME/.zshrc-$HOST
 fi
 
+
+export XDG_CONFIG_HOME="$HOME/.config"
 source  /usr/local/lib/python3.5/dist-packages/powerline/bindings/zsh/powerline.zsh

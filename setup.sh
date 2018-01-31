@@ -3,6 +3,9 @@
 # tools
 # this is currently not very generic and can be improved
 
+
+# TODO: add powerline configuration
+
 function install_i3 {
 	TDIR=$HOME/.config/i3
 	if [ -d "$1/i3" ]; then
