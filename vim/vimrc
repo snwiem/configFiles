@@ -9,3 +9,10 @@ set noshowmode
 set t_Co=256
 
 colorscheme elflord
+
+if has("gui_running")
+	set guifont=Terminus\ 10
+	set guioptions -=m "hide menu bar
+	set guioptions -=T "hide toolbar
+	set guioptions -=r "disable scrollbar
+endif

@@ -14,6 +14,7 @@ set $mod Mod4
 #set $bgimage /home/snwiem/Shared/Wallpapers/880205.jpg
 #set $bgimage /home/snwiem/Shared/Wallpapers/uHLSVY.png
 #set $bgimage /home/snwiem/Shared/Wallpapers/ubuntu_linux_operating_system_gray_os_62509_1920x1080.jpg
+set $bgimage /home/snwiem/Shared/Wallpapers/geek-wallpaper-collection-1-stugon.com-3.jpg
 set $terminal lxterminal
 #set $terminal terminator
 
@@ -236,4 +237,4 @@ bindsym $mod+Shift+g exec i3-input -F 'exec surf https://www.google.de/search?q=
 #exec --no-startup-id /usr/bin/autocutsel -f -s SECONDARY
 
 #exec --no-startup-id /usr/bin/xcompmgr -c
-#exec --no-startup-id feh --bg-scale $bgimage
+exec --no-startup-id feh --bg-scale $bgimage
