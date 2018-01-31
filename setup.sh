@@ -6,6 +6,16 @@
 
 # TODO: add powerline configuration
 
+function install_conky {
+	TFILE=$HOME/.config/.conkyrc
+	if [ -f "$1/conky/conkyrc" ]; then
+		echo "Installing conky configuration"
+		ln -sf "$1/conky/conkyrc" $TFILE
+	else
+		echo "No conky configuration found"
+	fi
+}
+
 function install_i3 {
 	TDIR=$HOME/.config/i3
 	if [ -d "$1/i3" ]; then
