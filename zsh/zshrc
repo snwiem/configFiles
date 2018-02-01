@@ -57,7 +57,7 @@ setopt RM_STAR_WAIT
 setopt AUTO_CONTINUE
 
 # Don’t write over existing files with >, use >! instead
-setopt NOCLOBBER
+#setopt NOCLOBBER
 
 # Don’t nice background processes
 #setopt NO_BG_NICE
@@ -329,6 +329,12 @@ if [ -f $HOME/.zshrc-$HOST ]
 then
 	. $HOME/.zshrc-$HOST
 fi
+
+set_title() {
+	echo -n "\033]2;${USER}@${HOST}\007"
+}
+typeset -a precmd_functions
+precmd_functions+=(set_title)
 
 
 export XDG_CONFIG_HOME="$HOME/.config"
